@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from .models import Project,ProjectResource,Resource,ResourceTechnology,Technology
 from .serializers import ProjectSerializer,ResourceProjectSerializer,ResourceSerializer,ResourceTechnologySerializer,TechnologySerializer
 
+
+
 # Create your views here.
 
 """ 

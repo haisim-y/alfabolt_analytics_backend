@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-491!_3y&#e8vdk7@r380t7ifcpd3v%@0dart75f*f(-f+iuckw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['1161-2407-d000-f-b9e8-95-3757-e762-2c31.ngrok-free.app']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','4272-39-43-171-82.ngrok-free.app']
 
 
 # Application definition
@@ -41,13 +41,15 @@ DEFAULT_INSTALLED_APPS = [
 ]
 THIRD_PARTY_APPS=[
 
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 PROJECT_APPS=[
 
     'marketing',
     'sales',
-    'engineer_utilization'
+    'engineer_utilization',
+    'users',
 ]
 INSTALLED_APPS = DEFAULT_INSTALLED_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
@@ -60,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+AUTH_USER_MODEL='users.CustomUser'
 
 ROOT_URLCONF = 'alfabolt_analytics.urls'
 
