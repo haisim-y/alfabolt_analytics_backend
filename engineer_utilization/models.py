@@ -94,6 +94,7 @@ class ResourceTechnology(BaseModel,models.Model):
 
     def __str__(self):
         return f"{self.resource.first_name} {self.resource.last_name} has {self.experience_in_years} years experience in {self.technology.name}"
+    
 
 
 
