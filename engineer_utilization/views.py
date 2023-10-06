@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from .models import Project,ProjectResource,Resource,ResourceTechnology,Technology
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from .serializers import ProjectSerializer,ResourceProjectPostSerializer,ResourceProjectGetSerializer,ResourceProjectHideProjectSerializer,ResourceProjectHideResourceSerializer,ResourceSerializer,ResourceTechnologySerializer,TechnologySerializer
+from .serializers import ResourceTechnologyPostSerializer,ResourceProjectPostSerializer,ProjectSerializer,ResourceProjectPostSerializer,ResourceProjectGetSerializer,ResourceProjectHideProjectSerializer,ResourceProjectHideResourceSerializer,ResourceSerializer,ResourceTechnologyGetSerializer,TechnologySerializer,ResourceTechnologyHideTechnologySerializer,ResourceTechnologyHideResourceSerializer
 
 
 
@@ -91,30 +91,47 @@ class TechnologyDeleteApiView(generics.DestroyAPIView):
 
 """
 
-class ResourceTechListCreateApiView(generics.ListCreateAPIView):
-    queryset=ResourceTechnology.objects.all()
-    serializer_class=ResourceTechnologySerializer
+class GetTechnologyResourceListApiView(generics.ListAPIView):
+
+    #queryset=ProjectResource.objects.all()
+    serializer_class=ResourceTechnologyHideTechnologySerializer
+    #pagination_class=CustomPagination
+    def get_queryset(self):
+        tech_id=self.kwargs['id']
+        return ResourceTechnology.objects.filter(technology=tech_id)
+
+class GetResourceTechnologyListApiView(generics.ListAPIView):
+
+    #queryset=ProjectResource.objects.all()
+    serializer_class=ResourceTechnologyHideResourceSerializer
+    #pagination_class=CustomPagination
+    def get_queryset(self):
+        resource_id=self.kwargs['id']
+        return ResourceTechnology.objects.filter(resource=resource_id)
 
 class ResourceTechDetailApiView(generics.RetrieveAPIView):
     queryset=ResourceTechnology.objects.all()
-    serializer_class=ResourceTechnologySerializer
+    serializer_class=ResourceTechnologyGetSerializer
 
 class ResourceTechUpdateApiView(generics.UpdateAPIView):
     queryset=ResourceTechnology.objects.all()
-    serializer_class=ResourceTechnologySerializer
+    serializer_class=ResourceTechnologyPostSerializer
     lookup_field='pk'
 
 class ResourceTechDeleteApiView(generics.DestroyAPIView):
     queryset=ResourceTechnology.objects.all()
-    serializer_class=ResourceTechnologySerializer
+    serializer_class=ResourceTechnologyPostSerializer
+class ResourceTechCreateApiView(generics.CreateAPIView):
+    queryset=ResourceTechnology.objects.all()
+    serializer_class=ResourceTechnologyPostSerializer
 
 """ 
-                                PROJECT RESOURCE                              
+    ---------------------------------------------- PROJECT RESOURCE-----------------------------------------------------------------------                     
 
-"""
-class CustomPagination(PageNumberPagination):
-    page_size = 2  # Set the number of items per page
-    page_size_query_param = 'page_size'  # Allow clients to specify the page size via a query parameter
+# """
+# class CustomPagination(PageNumberPagination):
+#     page_size = 2  # Set the number of items per page
+#     page_size_query_param = 'page_size'  # Allow clients to specify the page size via a query parameter
     
 
 
@@ -187,3 +204,4 @@ class ProjectResourceUpdateApiView(generics.UpdateAPIView):
 class ProjectResourceDeleteApiView(generics.DestroyAPIView):
     queryset=ProjectResource.objects.all()
     serializer_class=ResourceProjectPostSerializer
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------

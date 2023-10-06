@@ -21,8 +21,10 @@ urlpatterns = [
     path("technology/<int:pk>/delete/",views.TechnologyDeleteApiView.as_view()),
 
     #Resource Technology CRUD
-    path("resourcetechnology/",views.ResourceTechListCreateApiView.as_view()),
-    path("resourcetechnology/<int:pk>/",views.ResourceTechDetailApiView.as_view()),
+    path("resourcetechnology/resource/<int:id>/",views.GetResourceTechnologyListApiView.as_view()),
+    path("resourcetechnology/technology/<int:id>/",views.GetTechnologyResourceListApiView.as_view()),
+    path("resourcetechnology/",views.GetTechnologyResourceListApiView.as_view()),
+    path("resourcetechnology/detail/<int:pk>/",views.ResourceTechDetailApiView.as_view()),
     path("resourcetechnology/<int:pk>/update/",views.ResourceTechUpdateApiView.as_view()),
     path("resourcetechnology/<int:pk>/delete/",views.ResourceTechDeleteApiView.as_view()),
 

@@ -22,7 +22,7 @@ class ResourceProjectGetSerializer(serializers.ModelSerializer):
         fields=['project','role','resource_joined_date','project_lead']
 class ResourceProjectHideResourceSerializer(serializers.ModelSerializer):
     #resource=ResourceSerializer()
-    project=ProjectSerializer()
+    project =ProjectSerializer()
     class Meta:
         model=ProjectResource
         depth=1
@@ -42,20 +42,38 @@ class ResourceProjectPostSerializer(serializers.ModelSerializer):
  
         fields='__all__'
 
-                #-----------------------Technology Serializer------------------------
+                #-----------------------Technology Serializer---------------------------------------------------------------------------
 class TechnologySerializer(serializers.ModelSerializer):
     class Meta:
         model=Technology
         fields=['id','name','domain']
-
-                                        #ResourceTechnology Serializer
-class ResourceTechnologySerializer(serializers.ModelSerializer):
+#------------------------------------ResourceTechnology Serializer----------------------------------------------------------------------
+class ResourceTechnologyGetSerializer(serializers.ModelSerializer):
     resource=ResourceSerializer()
     technology=TechnologySerializer()
     class Meta:
         model=ResourceTechnology
         depth=1
-        fields='__all__'
+        fields=['resource','technology','experience_in_years']
+class ResourceTechnologyPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=ResourceTechnology
+        fields=fields=['resource','technology','experience_in_years']
 
+class ResourceTechnologyHideTechnologySerializer(serializers.ModelSerializer):
+    resource=ResourceSerializer()
+    #technology=TechnologySerializer()
+    class Meta:
+        model=ResourceTechnology
+        depth=1
+        fields=['resource','experience_in_years']
+class ResourceTechnologyHideResourceSerializer(serializers.ModelSerializer):
+    #resource=ResourceSerializer()
+    technology=TechnologySerializer()
+    class Meta:
+        model=ResourceTechnology
+        depth=1
+        fields=['technology','experience_in_years']
+#-----------------------------------------------------------------------------------------------------------------------------------------
 
 

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-491!_3y&#e8vdk7@r380t7ifcpd3v%@0dart75f*f(-f+iuckw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','2009-39-43-171-82.ngrok-free.app']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','8d9e-39-43-165-205.ngrok-free.app']
 
 
 # Application definition
@@ -62,7 +62,7 @@ REST_FRAMEWORK = {
         # ... (other authentication classes)
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 2
+    'PAGE_SIZE': 20
 }
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
