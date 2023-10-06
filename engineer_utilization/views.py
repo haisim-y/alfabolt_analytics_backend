@@ -2,7 +2,9 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.views import APIView
 from .models import Project,ProjectResource,Resource,ResourceTechnology,Technology
-from .serializers import ProjectSerializer,ResourceProjectSerializer,ResourceSerializer,ResourceTechnologySerializer,TechnologySerializer
+from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
+from .serializers import ProjectSerializer,ResourceProjectPostSerializer,ResourceProjectGetSerializer,ResourceProjectHideProjectSerializer,ResourceProjectHideResourceSerializer,ResourceSerializer,ResourceTechnologySerializer,TechnologySerializer
 
 
 
@@ -16,12 +18,12 @@ class ProjectListCreateApiView(generics.ListCreateAPIView):
     queryset=Project.objects.all()
     serializer_class=ProjectSerializer
 
-    def perform_create(self, serializer):
-        title=serializer.validated_data.get('title')
-        description=serializer.validated_data.get('description')
-        if description is None:
-            description=title
-            serializer.save(title=title,description=description)
+    # def perform_create(self, serializer):
+    #     title=serializer.validated_data.get('title')
+    #     description=serializer.validated_data.get('description')
+    #     if description is None:
+    #         description=title
+    #         serializer.save(title=title,description=description)
 
 class ProjectDetailApiView(generics.RetrieveAPIView):
     queryset=Project.objects.all()
@@ -110,20 +112,78 @@ class ResourceTechDeleteApiView(generics.DestroyAPIView):
                                 PROJECT RESOURCE                              
 
 """
+class CustomPagination(PageNumberPagination):
+    page_size = 2  # Set the number of items per page
+    page_size_query_param = 'page_size'  # Allow clients to specify the page size via a query parameter
+    
 
-class ProjectResourceListCreateApiView(generics.ListCreateAPIView):
-    queryset=ProjectResource.objects.all()
-    serializer_class=ResourceProjectSerializer
+
+class GetResourceProjectListApiView(generics.ListAPIView):
+    #queryset=ProjectResource.objects.all()
+    serializer_class=ResourceProjectHideResourceSerializer
+    def get_queryset(self):
+        resource_id=self.kwargs['id']
+        return ProjectResource.objects.filter(resource=resource_id)
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.get_queryset()
+
+    #     Calculate the total number of projects for the resource
+    #     total_projects = queryset.count()
+
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     data = serializer.data
+
+    #     Create a custom response dictionary that includes the count and project data
+    #     response_data = {
+    #         'total_projects of resource': total_projects,
+    #         'projects': data,
+    #     }
+
+    #     return Response(response_data)
+class GetProjectResourceListApiView(generics.ListAPIView):
+
+    #queryset=ProjectResource.objects.all()
+    serializer_class=ResourceProjectHideProjectSerializer
+    #pagination_class=CustomPagination
+    def get_queryset(self):
+        project_id=self.kwargs['id']
+        return ProjectResource.objects.filter(project=project_id)
+    
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.get_queryset()
+    #     paginator=self.pagination_class()
+    #     page=paginator.paginate_queryset(queryset,request)
+
+    #     # Calculate the total number of resources in the project
+    #     total_resources = queryset.count()
+
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     data = serializer.data
+
+    #     # Create a custom response dictionary that includes the count and project data
+    #     response_data = {
+    #         'total_resources in this project': total_resources,
+    #         'resources info': data,
+    #     }
+
+    #     return paginator.get_paginated_response(data)
+     
+    
 
 class ProjectResourceDetailApiView(generics.RetrieveAPIView):
     queryset=ProjectResource.objects.all()
-    serializer_class=ResourceProjectSerializer
+    serializer_class=ResourceProjectGetSerializer
 
+
+#post resource project
+class ProjectResourceCreateApiView(generics.CreateAPIView):
+    queryset=ProjectResource.objects.all()
+    serializer_class=ResourceProjectPostSerializer
 class ProjectResourceUpdateApiView(generics.UpdateAPIView):
     queryset=ProjectResource.objects.all()
-    serializer_class=ResourceProjectSerializer
+    serializer_class=ResourceProjectPostSerializer
     lookup_field='pk'
 
 class ProjectResourceDeleteApiView(generics.DestroyAPIView):
     queryset=ProjectResource.objects.all()
-    serializer_class=ResourceProjectSerializer
+    serializer_class=ResourceProjectPostSerializer

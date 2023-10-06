@@ -5,24 +5,48 @@ from .models import Project,ProjectResource,Resource,ResourceTechnology,Technolo
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model=Project
-        fields='__all__'
+        fields=['id',"title","description","start_date","budget_in_dollars"]
                                         #Resource Serializer
 class ResourceSerializer(serializers.ModelSerializer):
     class Meta:
         model=Resource
-        fields=['first_name','last_name','designation']
+        fields=['id','first_name','last_name','email','designation']
 
-                                        #Project Resource Serializer
-class ResourceProjectSerializer(serializers.ModelSerializer):
+#------------------------------------------------------------Project Resource Serializer-----------------------------
+class ResourceProjectGetSerializer(serializers.ModelSerializer):
+    resource=ResourceSerializer()
+    project=ProjectSerializer()
     class Meta:
         model=ProjectResource
+        depth=1
+        fields=['project','role','resource_joined_date','project_lead']
+class ResourceProjectHideResourceSerializer(serializers.ModelSerializer):
+    #resource=ResourceSerializer()
+    project=ProjectSerializer()
+    class Meta:
+        model=ProjectResource
+        depth=1
+        fields=['project','role','resource_joined_date','project_lead']
+
+class ResourceProjectHideProjectSerializer(serializers.ModelSerializer):
+    resource=ResourceSerializer()
+    #project=ProjectSerializer()
+    class Meta:
+        model=ProjectResource
+        depth=1
+        fields=['resource','role','resource_joined_date','project_lead']
+
+class ResourceProjectPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=ProjectResource
+ 
         fields='__all__'
 
-                                        #Technology Serializer
+                #-----------------------Technology Serializer------------------------
 class TechnologySerializer(serializers.ModelSerializer):
     class Meta:
         model=Technology
-        fields=['name']
+        fields=['id','name','domain']
 
                                         #ResourceTechnology Serializer
 class ResourceTechnologySerializer(serializers.ModelSerializer):
