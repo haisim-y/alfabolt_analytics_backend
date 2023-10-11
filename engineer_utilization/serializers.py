@@ -19,7 +19,7 @@ class ResourceProjectGetSerializer(serializers.ModelSerializer):
     class Meta:
         model=ProjectResource
         depth=1
-        fields=['project','role','resource_joined_date','project_lead']
+        fields=['resource','project','role','resource_joined_date','project_lead']
 class ResourceProjectHideResourceSerializer(serializers.ModelSerializer):
     #resource=ResourceSerializer()
     project =ProjectSerializer()

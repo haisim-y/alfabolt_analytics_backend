@@ -49,9 +49,11 @@ class UserLogin(generics.CreateAPIView):
         #         getting username and password from body
         username=request.data.get('username')
         password=request.data.get('password')
+       # print('password before authenticcation ', password)
 
         #user=get_object_or_404(self.queryset,username=username)
         user=authenticate(username=username,password=password)
+        #print('password after authenticcation ', user.password)
 
         if user is None:
             return Response("Invalid username or password", status=status.HTTP_404_NOT_FOUND)
@@ -64,6 +66,7 @@ class UserLogin(generics.CreateAPIView):
        # token,created=Token.objects.get_or_create(user=user)
 
         serializer=self.get_serializer(user)
+        #print('after login ', user.password)
         return Response({'tokens':res, 'user': serializer.data})
 
 class TokenRefreshView(APIView):

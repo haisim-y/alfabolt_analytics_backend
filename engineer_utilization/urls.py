@@ -9,10 +9,10 @@ urlpatterns = [
     path("project/<int:pk>/update/",views.ProjectUpdateApiView.as_view()),
     path("project/<int:pk>/delete/",views.ProjectDeleteApiView.as_view()),
     #Resource CRUD
-    path('resource/',views.ResourceListCreateApiView.as_view()),
-    path("resource/<int:pk>/",views.ResourceDetailApiView.as_view()),
-    path("resource/<int:pk>/update/",views.ResourceUpdateApiView.as_view()),
-    path("resource/<int:pk>/delete/",views.ResourceDeleteApiView.as_view()),
+    path('resource/',views.ResourceListCreateApiView.as_view(),name='resource'),
+    path("resource/<int:pk>/",views.ResourceDetailApiView.as_view(),name='resource_detail'),
+    path("resource/<int:pk>/update/",views.ResourceUpdateApiView.as_view(),name='resource_update'),
+    path("resource/<int:pk>/delete/",views.ResourceDeleteApiView.as_view(),name='resource_delete'),
 
     #Technology CRUD
     path('technology/',views.TechnologyListCreateApiView.as_view()),
