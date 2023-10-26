@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-491!_3y&#e8vdk7@r380t7ifcpd3v%@0dart75f*f(-f+iuckw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','423e-39-43-209-105.ngrok-free.app']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','c743-39-43-167-125.ngrok-free.app']
 
 
 # Application definition
@@ -45,6 +45,7 @@ THIRD_PARTY_APPS=[
 
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
 ]
 PROJECT_APPS=[
 
@@ -61,8 +62,11 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         # ... (other authentication classes)
     ),
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+
     'PAGE_SIZE': 20
+
 }
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),

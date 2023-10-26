@@ -13,17 +13,20 @@ project
 
 class Resource(BaseModel,models.Model):
     GENDER=[
+
         ('M', 'Male'),
         ('F', 'Female'),
         ('O','Other')
     ]
     SKILL=[
+
         ('Management','Project Management'),
         ('ML','Machine Learning'),
         ('Dvelopment','Software Devlopment'),
         ('Hr','Human Resource')
     ]
     DESIGNATION=[
+
         ('Software Engineer','Software Engineer'),
         ('Data Scientist','Data Scientist'),
         ('Data Analyst','Data Analyst'),
@@ -31,6 +34,19 @@ class Resource(BaseModel,models.Model):
         ('CEO','Cheif Executive Officer'),
         ('CTO','Cheif Technology Officer'),
         ('Designer','Designer')
+    ]
+    RESOURCE_STATUS=[
+
+        ('Part-Time','Part Time Employee'),
+        ('Full-Time','Full Time Employee'),
+        ('Intern','Internee'),
+
+    ]
+    RESOURCE_LEVEL=[
+
+        ('1','Jr. Level'),
+        ('2','Mid Level'),
+        ('3','Sr. Level'),
     ]
 
     first_name = models.CharField(max_length=100)
@@ -43,7 +59,10 @@ class Resource(BaseModel,models.Model):
     hire_date = models.DateField(auto_now_add=True)
     gender=models.CharField(max_length=8,choices=GENDER)
     designation=models.CharField(max_length=100,choices=DESIGNATION)
-
+    resource_status=models.CharField(max_length=50,choices=RESOURCE_STATUS,default='Part-Time')
+    maximum_weekly_hours=models.IntegerField(default=40)
+    level=models.CharField(max_length=100,choices=RESOURCE_LEVEL)
+    
     def __str__(self):
         return self.first_name
 class Project(BaseModel,models.Model):
@@ -64,11 +83,15 @@ class ProjectResource(BaseModel,models.Model):
         ('Cloud','CLoud Architect'),
         ('Data Science','Data Scientist')
     ]
+
     resource=models.ForeignKey(Resource, on_delete=models.CASCADE)
     project=models.ForeignKey(Project, on_delete=models.CASCADE)
     role=models.CharField(max_length=100,choices=ROLES)
     resource_joined_date = models.DateField()
     project_lead = models.BooleanField(default=False)
+    allocated_weekly_hour=models.IntegerField(default=40)
+    
+
     def __str__(self):
         role_name=self.get_role_display()
         return f"{self.resource} in {self.project.title} as {role_name}"
@@ -94,6 +117,9 @@ class ResourceTechnology(BaseModel,models.Model):
 
     def __str__(self):
         return f"{self.resource.first_name} {self.resource.last_name} has {self.experience_in_years} years experience in {self.technology.name}"
+    
+
+
     
 
 
