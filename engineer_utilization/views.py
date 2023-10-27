@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Count
+from django.db.models import Count,Q
 from rest_framework import generics
 from rest_framework.views import APIView
 from .models import Project,ProjectResource,Resource,ResourceTechnology,Technology
@@ -287,25 +287,39 @@ class dashboard(generics.ListAPIView):
     queryset=Resource.objects.all()
     serializer_class=ResourceProjectDashboardSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['projectresource__project__title', 'resourcetechnology__technology__name', 'level']
+    search_fields = ['first_name','last_name','projectresource__project__title', 'resourcetechnology__technology__name', 'level']
+ 
     def get_queryset(self):
-        queryset=super().get_queryset()
+        queryset = super().get_queryset()
         filter_conditions = {}
+        first_name = self.request.query_params.get('first_name')
+        last_name = self.request.query_params.get('last_name')
         project_title = self.request.query_params.get('project_title')
-        technology_name = self.request.query_params.get('technology_name')
-        resource_level = self.request.query_params.get('resource_level')
+        resource_level = self.request.query_params.get('level')
+        technology_names = self.request.query_params.getlist('technology_name')  # Retrieve as a list
 
+        if first_name:
+            filter_conditions['first_name'] = first_name
+        if last_name:
+            filter_conditions['last_name'] = last_name
         if project_title:
             filter_conditions['projectresource__project__title__icontains'] = project_title
-        if technology_name:
-            filter_conditions['resourcetechnology__technology__name__icontains'] = technology_name
         if resource_level:
-            filter_conditions['level__icontains'] = resource_level
-
+            filter_conditions['level'] = resource_level
 
         # Apply the filter conditions to the queryset
         queryset = queryset.filter(**filter_conditions)
 
-        return queryset
+        # Apply the filter for technology names, allowing any to match (OR condition)
+        if technology_names:
+            tech_name_queries = [Q(resourcetechnology__technology__name__icontains=tech_name) for tech_name in technology_names]
+            combined_query = Q()
+            for tech_name_query in tech_name_queries:
+                combined_query |= tech_name_query
+            print(combined_query)
+            queryset = queryset.filter(combined_query).distinct()
 
-      
+        # Ensure the queryset is distinct to avoid duplicate entries
+        #queryset = queryset.distinct()
+
+        return queryset
