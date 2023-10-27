@@ -44,8 +44,8 @@ urlpatterns = [
     path("count-resource-for-technology-domain/",views.CountResourcesForEachTechDomain.as_view()),
     path("count-resource-for-technology/",views.CountResourcesForEachTechnology.as_view()),
     path("count-technology/",views.CountTechnology.as_view()),
-    path("temp/",views.temp.as_view()),
-    path("dashboard/",views.dashboard.as_view()),
+    path("temp/",views.Temp.as_view()),
+    path("dashboard/",views.Dashboard.as_view()),
     
 
 ]
