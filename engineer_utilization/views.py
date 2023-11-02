@@ -212,20 +212,20 @@ class ProjectResourceDeleteApiView(generics.DestroyAPIView):
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-class CountResourcesForEachTechDomain(APIView):
-    def get(self,request,*args,**kwargs):
-        queryset=ResourceTechnology.objects.values("technology__domain") \
-            .annotate(resource_count=Count("resource__id"))
-        result=[]
-        for item in queryset:
-            result.append(
-                {
-                 'technology domain':item['technology__domain'],
-                 'Number of Resources':item['resource_count']
-                }
+# class CountResourcesForEachTechDomain(APIView):
+#     def get(self,request,*args,**kwargs):
+#         queryset=ResourceTechnology.objects.values("technology__domain") \
+#             .annotate(resource_count=Count("resource__id"))
+#         result=[]
+#         for item in queryset:
+#             result.append(
+#                 {
+#                  'technology domain':item['technology__domain'],
+#                  'Number of Resources':item['resource_count']
+#                 }
 
-            )
-        return Response(result)
+#             )
+#         return Response(result)
 class CountResourcesForEachTechnology(APIView):
     def get(self,request,*args,**kwargs):
         queryset=ResourceTechnology.objects.values("technology__name") \
@@ -281,7 +281,7 @@ class CountTechnologyDomain(APIView):
 class Temp(generics.ListAPIView):
     queryset=ProjectResource.objects.all()
     serializer_class=ResourceProjectGetSerializer
-from django.db.models import Q
+
 
 class Dashboard(generics.ListAPIView):
 

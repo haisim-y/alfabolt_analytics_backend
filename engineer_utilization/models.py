@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 from alfabolt_analytics.baseModels import BaseModel
 # Create your models here.
 
@@ -12,99 +13,61 @@ project
 """
 
 class Resource(BaseModel,models.Model):
-    GENDER=[
-
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O','Other')
-    ]
-    SKILL=[
-
-        ('Management','Project Management'),
-        ('ML','Machine Learning'),
-        ('Dvelopment','Software Devlopment'),
-        ('Hr','Human Resource')
-    ]
-    DESIGNATION=[
-
-        ('Software Engineer','Software Engineer'),
-        ('Data Scientist','Data Scientist'),
-        ('Data Analyst','Data Analyst'),
-        ('HR','Human Resource'),
-        ('CEO','Cheif Executive Officer'),
-        ('CTO','Cheif Technology Officer'),
-        ('Designer','Designer')
-    ]
-    RESOURCE_STATUS=[
-
-        ('Part-Time','Part Time Employee'),
-        ('Full-Time','Full Time Employee'),
-        ('Intern','Internee'),
-
-    ]
-    RESOURCE_LEVEL=[
-
-        ('1','Jr. Level'),
-        ('2','Mid Level'),
-        ('3','Sr. Level'),
-    ]
 
     first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100,blank=True,null=True)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
-    skills = models.TextField(blank=True, null=True,choices=SKILL)
-    availability = models.BooleanField(default=True)
     hire_date = models.DateField(auto_now_add=True)
-    gender=models.CharField(max_length=8,choices=GENDER)
-    designation=models.CharField(max_length=100,choices=DESIGNATION)
-    resource_status=models.CharField(max_length=50,choices=RESOURCE_STATUS,default='Part-Time')
+    leaving_date=models.DateField(blank=True,null=True)
+    gender=models.CharField(max_length=20,blank=True,null=True)
+    currenly_working=models.BooleanField(default=True)
     maximum_weekly_hours=models.IntegerField(default=40)
-    level=models.CharField(max_length=100,choices=RESOURCE_LEVEL)
+    level = models.ForeignKey('Level', on_delete=models.SET_NULL, null=True, blank=True)
+    status = models.ForeignKey('Status', on_delete=models.SET_NULL, null=True, blank=True)
+    designation = models.ForeignKey('Designation', on_delete=models.SET_NULL, null=True, blank=True)
     
     def __str__(self):
         return self.first_name
+class Level(BaseModel,models.Model):
+    name=models.CharField(max_length=50,default='1')
+    def __str__(self):
+        return self.name
+class Designation(BaseModel,models.Model):
+    name=models.CharField(max_length=100,default='-')
+    def __str__(self):
+        return self.name
+class Status(BaseModel,models.Model):
+    name=models.CharField(max_length=50,default='-')
+    def __str__(self):
+        return self.name        
 class Project(BaseModel,models.Model):
+
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    start_date = models.DateField()
-   # end_date= models.DateField()
-    budget_in_dollars = models.DecimalField(max_digits=10, decimal_places=2)
-    #team_member=models.ManyToManyField(Resource,through="ProjectResource")
+    start_date = models.DateField(auto_now_add=datetime.now())
+    end_date= models.DateField(blank=True,null=True)
     def __str__(self):
         return self.title
 class ProjectResource(BaseModel,models.Model):
-    ROLES=[
-
-        ('Frontend ','Frontend Developer'),
-        ('Backend','Backend Developer'),
-        ('Devops','Devops Developer'),
-        ('Cloud','CLoud Architect'),
-        ('Data Science','Data Scientist')
-    ]
 
     resource=models.ForeignKey(Resource, on_delete=models.CASCADE)
     project=models.ForeignKey(Project, on_delete=models.CASCADE)
-    role=models.CharField(max_length=100,choices=ROLES)
-    resource_joined_date = models.DateField()
+    role=models.CharField(max_length=100)
+    resource_joining_date = models.DateField(default=datetime.now)
+    resource_ending_date=models.DateField(null=True,blank=True)
+    resource_currently_working=models.FileField(default=True)
     project_lead = models.BooleanField(default=False)
     allocated_weekly_hour=models.IntegerField(default=40)
-    
 
     def __str__(self):
         role_name=self.get_role_display()
         return f"{self.resource} in {self.project.title} as {role_name}"
     
 class Technology(BaseModel,models.Model):
-    TECH_DOMAINS=[
-        ('Backend Development','Backend Development'),
-        ('Frontend Development','Frontend Development'),
-        ('Data Science','Data Science'),
-        ('Sales','Sales'),
-    ]
+
     name = models.CharField(max_length=100)
-    domain=models.CharField(max_length=50,choices=TECH_DOMAINS)
 
     def __str__(self):
         return self.name
@@ -117,12 +80,3 @@ class ResourceTechnology(BaseModel,models.Model):
 
     def __str__(self):
         return f"{self.resource.first_name} {self.resource.last_name} has {self.experience_in_years} years experience in {self.technology.name}"
-    
-
-
-    
-
-
-
-
-
