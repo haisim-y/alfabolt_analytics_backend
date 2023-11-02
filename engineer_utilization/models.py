@@ -42,14 +42,21 @@ class Status(BaseModel,models.Model):
     name=models.CharField(max_length=50,default='-')
     def __str__(self):
         return self.name        
+    
 class Project(BaseModel,models.Model):
 
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     start_date = models.DateField(auto_now_add=datetime.now())
     end_date= models.DateField(blank=True,null=True)
+    currently_ongoing=models.BooleanField(default=True)
+    domain=models.ForeignKey('Domain',on_delete=models.SET_NULL,null=True,blank=True)
     def __str__(self):
         return self.title
+class Domain(BaseModel,models.Model):
+    name=models.CharField(max_length=100,default='Tech')
+    def __str__(self):
+        return self.name
 class ProjectResource(BaseModel,models.Model):
 
     resource=models.ForeignKey(Resource, on_delete=models.CASCADE)
