@@ -23,10 +23,12 @@ urlpatterns = [
     #Resource Technology CRUD
     path("resourcetechnology/resource/<int:id>/",views.GetResourceTechnologyListApiView.as_view()),
     path("resourcetechnology/technology/<int:id>/",views.GetTechnologyResourceListApiView.as_view()),
-    path("resourcetechnology/",views.GetTechnologyResourceListApiView.as_view()),
+    path("resourcetechnology/",views.ResourceTechCreateApiView.as_view()),
     path("resourcetechnology/detail/<int:pk>/",views.ResourceTechDetailApiView.as_view()),
     path("resourcetechnology/<int:pk>/update/",views.ResourceTechUpdateApiView.as_view()),
     path("resourcetechnology/<int:pk>/delete/",views.ResourceTechDeleteApiView.as_view()),
+
+    
 
     #--------------------------------Resource Project---------------------------------------------------------------------------------
     path("resourceproject/resource/<int:id>/",views.GetResourceProjectListApiView.as_view()),
@@ -35,7 +37,14 @@ urlpatterns = [
     path("resourceproject/detail/<int:pk>/",views.ProjectResourceDetailApiView.as_view()),
     path("resourceproject/<int:pk>/update/",views.ProjectResourceUpdateApiView.as_view()),
     path("resourceproject/<int:pk>/delete/",views.ProjectResourceDeleteApiView.as_view()),
+    
    
  #--------------------------------------------------------------------------------------------------------------------------------------
+    path("count-resource-in-project/",views.CountResourcesInEachProject.as_view()),
+    path("count-resource-for-technology/",views.CountResourcesForEachTechnology.as_view()),
+    path("count-technology/",views.CountTechnology.as_view()),
+    path("temp/",views.Temp.as_view()),
+    path("dashboard/",views.Dashboard.as_view()),
+    
 
 ]
